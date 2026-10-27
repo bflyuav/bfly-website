@@ -818,6 +818,7 @@
       alt="Turco Fighter İnsansız Hava Aracı"
       class="hero-drone-img"
       id="heroDroneImg"
+      data-slot="tf-hero"
       onerror="this.style.display='none'; document.getElementById('heroDroneFallback').style.display='flex'"
     />
     <!-- Görsel bulunamazsa yedek gösterim -->
@@ -883,7 +884,7 @@
       <!-- Slayt 1 -->
       <div class="feature-slide">
         <div class="feature-slide-inner">
-          <div class="feature-media">
+          <div class="feature-media" data-slot-box="tf-ucus">
             <div class="feature-media-label">🎬 Uçuş Görüntüsü</div>
             <video autoplay muted loop playsinline
               src="/assets/videos/turcofighter-flight.mp4"
@@ -904,7 +905,7 @@
       <!-- Slayt 2 -->
       <div class="feature-slide">
         <div class="feature-slide-inner">
-          <div class="feature-media">
+          <div class="feature-media" data-slot-box="tf-goruntu">
             <div class="feature-media-label">📷 Görüntü Sistemi</div>
             <img src="/assets/images/turcofighter-vision.jpeg" alt="Uçak üstü görüntü sistemi"
               onerror="this.style.opacity='0'" />
@@ -923,7 +924,7 @@
       <!-- Slayt 3 -->
       <div class="feature-slide">
         <div class="feature-slide-inner">
-          <div class="feature-media">
+          <div class="feature-media" data-slot-box="tf-yarisma">
             <div class="feature-media-label">🎬 Yarışma Görüntüsü</div>
             <video autoplay muted loop playsinline
               src="/assets/videos/turcofighter-competition.mp4"
@@ -944,7 +945,7 @@
       <!-- Slayt 4 -->
       <div class="feature-slide">
         <div class="feature-slide-inner">
-          <div class="feature-media">
+          <div class="feature-media" data-slot-box="tf-yki">
             <div class="feature-media-label">📷 Yer Kontrol İstasyonu</div>
             <img src="/assets/images/turcofighter-gcs.jpeg" alt="Yer kontrol istasyonu"
               onerror="this.style.opacity='0'" />
@@ -992,6 +993,7 @@
         src="/assets/images/turcofighter-design.jpg"
         alt="Turco Fighter tasarım görünümü"
         class="design-drone-img"
+        data-slot="tf-tasarim"
         onerror="this.closest('.design-drone-showcase').style.display='none'"
       />
       <div class="design-glow"></div>
@@ -1077,7 +1079,7 @@
       <div class="accordion-list" id="accordionList">
 
         <div class="accordion-item">
-          <button class="accordion-trigger active" data-image="turcofighter-detail-airframe.jpg" data-label="EPO Gövde">
+          <button class="accordion-trigger active" data-image="turcofighter-detail-airframe.jpg" data-slot="tf-detay-govde" data-label="EPO Gövde">
             <span class="accordion-icon">+</span>
             <span class="accordion-label">EPO Köpük Uçan Kanat Gövde</span>
           </button>
@@ -1087,7 +1089,7 @@
         </div>
 
         <div class="accordion-item">
-          <button class="accordion-trigger" data-image="turcofighter-detail-propulsion.jpg" data-label="İtici Motor">
+          <button class="accordion-trigger" data-image="turcofighter-detail-propulsion.jpg" data-slot="tf-detay-itici" data-label="İtici Motor">
             <span class="accordion-icon">+</span>
             <span class="accordion-label">İtici (Pusher) Konfigürasyon</span>
           </button>
@@ -1097,7 +1099,7 @@
         </div>
 
         <div class="accordion-item">
-          <button class="accordion-trigger" data-image="turcofighter-detail-avionics.jpg" data-label="Aviyonik Entegrasyonu">
+          <button class="accordion-trigger" data-image="turcofighter-detail-avionics.jpg" data-slot="tf-detay-aviyonik" data-label="Aviyonik Entegrasyonu">
             <span class="accordion-icon">+</span>
             <span class="accordion-label">Özel Aviyonik Entegrasyonu</span>
           </button>
@@ -1107,7 +1109,7 @@
         </div>
 
         <div class="accordion-item">
-          <button class="accordion-trigger" data-image="turcofighter-detail-detection.jpg" data-label="Hedef Tespiti">
+          <button class="accordion-trigger" data-image="turcofighter-detail-detection.jpg" data-slot="tf-detay-hedef" data-label="Hedef Tespiti">
             <span class="accordion-icon">+</span>
             <span class="accordion-label">Görüntü Tabanlı Hedef Tespiti</span>
           </button>
@@ -1117,7 +1119,7 @@
         </div>
 
         <div class="accordion-item">
-          <button class="accordion-trigger" data-image="turcofighter-detail-battery.jpg" data-label="Güç Sistemi">
+          <button class="accordion-trigger" data-image="turcofighter-detail-battery.jpg" data-slot="tf-detay-guc" data-label="Güç Sistemi">
             <span class="accordion-icon">+</span>
             <span class="accordion-label">Güç Sistemi</span>
           </button>
@@ -1197,6 +1199,7 @@
             alt="Turco Fighter yakınlaştırma görünümü"
             class="drone-3d-img is-photo"
             id="drone3dImg"
+            data-slot="tf-zoom"
             onerror="this.style.opacity='0.3'"
           />
         </div>
@@ -1344,25 +1347,25 @@
       <button class="gallery-tab" data-tab="videos">Videolar</button>
     </div>
     <div class="gallery-grid reveal">
-      <div class="gallery-item">
+      <div class="gallery-item" data-slot-box="tf-medya-1">
         <div class="gallery-placeholder">
           <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
         </div>
         <div class="gallery-item-label">İlk Uçuş Denemesi</div>
       </div>
-      <div class="gallery-item">
+      <div class="gallery-item" data-slot-box="tf-medya-2">
         <div class="gallery-placeholder">
           <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8"><polygon points="5 3 19 12 5 21 5 3"/></svg>
         </div>
         <div class="gallery-item-label">Otonom Algoritma Testi</div>
       </div>
-      <div class="gallery-item">
+      <div class="gallery-item" data-slot-box="tf-medya-3">
         <div class="gallery-placeholder">
           <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
         </div>
         <div class="gallery-item-label">Aviyonik Entegrasyonu</div>
       </div>
-      <div class="gallery-item">
+      <div class="gallery-item" data-slot-box="tf-medya-4">
         <div class="gallery-placeholder">
           <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
         </div>
@@ -1434,6 +1437,7 @@
 <!-- ================================================
      SCRIPTS
      ================================================ -->
+<script src="/js/site-media.js"></script>
 <script>
   /* ---- Hotspot'lar ---- */
   document.querySelectorAll('.hotspot').forEach(hs => {
@@ -1469,6 +1473,18 @@
   const clPlaceholder = document.getElementById('clPlaceholder');
   const clLabel = document.getElementById('clLabel');
 
+  // Sağdaki görsel: yönetim sayfasından yüklendiyse o (site-media.js), yoksa assets/images'taki dosya
+  function showDetail(btn) {
+    const uploaded = window.BFLY_MEDIA && window.BFLY_MEDIA[btn.dataset.slot];
+    const src  = uploaded ? uploaded.url : `/assets/images/${btn.dataset.image}`;
+    const label = btn.dataset.label || '';
+    clLabel.textContent = label;
+    clImage.src = src;
+    clImage.alt = label;
+    clImage.style.display = 'block';
+    clImage.onerror = () => { clImage.style.display = 'none'; clPlaceholder.style.display = 'flex'; };
+    clImage.onload  = () => { clPlaceholder.style.display = 'none'; };
+  }
   document.querySelectorAll('.accordion-trigger').forEach(btn => {
     btn.addEventListener('click', () => {
       const isOpen = btn.classList.contains('active');
@@ -1480,16 +1496,12 @@
         btn.classList.add('active');
         btn.nextElementSibling.classList.add('open');
       }
-      // Sağdaki görseli güncelle
-      const src  = `/assets/images/${btn.dataset.image}`;
-      const label = btn.dataset.label || '';
-      clLabel.textContent = label;
-      clImage.src = src;
-      clImage.alt = label;
-      clImage.style.display = 'block';
-      clImage.onerror = () => { clImage.style.display = 'none'; clPlaceholder.style.display = 'flex'; };
-      clImage.onload  = () => { clPlaceholder.style.display = 'none'; };
+      showDetail(btn);
     });
+  });
+  document.addEventListener('bfly:media', () => {
+    const active = document.querySelector('.accordion-trigger.active');
+    if (active) showDetail(active);
   });
 
   /* ---- Kaydırmalı Yakınlaştırma ---- */

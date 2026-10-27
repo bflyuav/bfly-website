@@ -342,6 +342,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const clImage = document.getElementById('clImage');
   const clPlaceholder = document.getElementById('clPlaceholder');
   const clLabel = document.getElementById('clLabel');
+  // Görsel: yönetim sayfasından yüklendiyse o (site-media.js), yoksa assets/images'taki dosya
+  function showDetail(btn) {
+    const lang = window.BFLY_CURRENT_LANG || 'en';
+    const label = lang === 'tr' ? btn.dataset.labelTr : btn.dataset.labelEn;
+    const uploaded = window.BFLY_MEDIA && window.BFLY_MEDIA[btn.dataset.slot];
+    const src = uploaded ? uploaded.url : `/assets/images/${btn.dataset.image}`;
+    clLabel.textContent = label || '';
+    clImage.src = src; clImage.alt = label || ''; clImage.style.display = 'block';
+    clImage.onerror = () => { clImage.style.display = 'none'; clPlaceholder.style.display = 'flex'; };
+    clImage.onload  = () => { clPlaceholder.style.display = 'none'; };
+  }
   document.querySelectorAll('.accordion-trigger').forEach(btn => {
     btn.addEventListener('click', () => {
       const isOpen = btn.classList.contains('active');
@@ -350,15 +361,12 @@ document.addEventListener('DOMContentLoaded', () => {
         b.nextElementSibling.classList.remove('open');
       });
       if (!isOpen) { btn.classList.add('active'); btn.nextElementSibling.classList.add('open'); }
-
-      const lang = window.BFLY_CURRENT_LANG || 'en';
-      const label = lang === 'tr' ? btn.dataset.labelTr : btn.dataset.labelEn;
-      const src = `/assets/images/${btn.dataset.image}`;
-      clLabel.textContent = label || '';
-      clImage.src = src; clImage.alt = label || ''; clImage.style.display = 'block';
-      clImage.onerror = () => { clImage.style.display = 'none'; clPlaceholder.style.display = 'flex'; };
-      clImage.onload  = () => { clPlaceholder.style.display = 'none'; };
+      showDetail(btn);
     });
+  });
+  document.addEventListener('bfly:media', () => {
+    const active = document.querySelector('.accordion-trigger.active');
+    if (active) showDetail(active);
   });
 
   /* ===== Scroll Zoom ===== */

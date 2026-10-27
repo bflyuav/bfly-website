@@ -1,0 +1,107 @@
+/* =============================================
+   BFL'Y — yonetim.css (/yonetim/: site görselleri paneli)
+   ============================================= */
+:root {
+  --bg: #0D1117; --bg-card: #111827; --bg-dark: #080D13; --bg-raised: #162033;
+  --text: #F0F0F5; --text-muted: #8899BB; --accent: #4A9ECC;
+  --ok: #3FB27F; --warn: #E0A33A; --danger: #E5534B;
+  --border-dim: rgba(255, 255, 255, 0.08); --border-strong: rgba(255, 255, 255, 0.16);
+  --font-display: 'Orbitron', sans-serif; --font-body: 'Inter', system-ui, sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--font-body); font-size: 15px; line-height: 1.5; }
+a { color: var(--accent); }
+
+header {
+  position: sticky; top: 0; z-index: 10; display: flex; align-items: center; gap: 12px; padding: 12px 16px;
+  background: rgba(8, 13, 19, 0.95); border-bottom: 1px solid var(--border-dim);
+}
+header img { display: block; height: 30px; }
+header .title { font-family: var(--font-display); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+header .spacer { flex: 1; }
+header .who { color: var(--text-muted); font-size: 0.85rem; }
+
+main { max-width: 1000px; margin: 0 auto; padding: 24px 16px 64px; }
+h1 { margin: 0 0 6px; font-family: var(--font-display); font-size: 1.4rem; }
+.sub { margin: 0 0 20px; color: var(--text-muted); }
+.card { padding: 20px; border: 1px solid var(--border-dim); border-radius: 8px; background: var(--bg-card); }
+.login { max-width: 380px; margin: 40px auto; }
+label { display: block; margin: 12px 0 4px; color: var(--text-muted); font-size: 0.85rem; }
+input[type=email], input[type=password] {
+  width: 100%; height: 44px; padding: 0 12px; border: 1px solid var(--border-strong); border-radius: 6px;
+  background: var(--bg-dark); color: var(--text); font: inherit;
+}
+input:focus-visible, .btn:focus-visible, .tabs button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.btn {
+  position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 38px; padding: 0 14px;
+  border: 1px solid var(--border-strong); border-radius: 6px; background: transparent; color: var(--text);
+  margin: 0; font: inherit; font-size: 0.85rem; text-decoration: none; cursor: pointer; overflow: hidden;
+}
+.btn:hover { border-color: var(--accent); color: var(--accent); }
+.btn:disabled { opacity: 0.55; cursor: wait; }
+.btn-primary { border-color: var(--accent); background: var(--accent); color: #06131c; font-weight: 600; }
+.btn-primary:hover { background: #62b8e0; color: #06131c; }
+.btn-danger { border-color: rgba(229, 83, 75, 0.5); color: var(--danger); }
+.btn-block { width: 100%; margin-top: 8px; }
+.btn input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.error { min-height: 1.2em; margin: 10px 0 0; color: var(--danger); font-size: 0.85rem; }
+
+.tabs { display: inline-flex; margin-bottom: 12px; border: 1px solid var(--border-strong); border-radius: 6px; overflow: hidden; }
+.tabs button { padding: 8px 18px; border: 0; background: transparent; color: var(--text-muted); font: inherit; cursor: pointer; }
+.tabs button.active { background: var(--bg-raised); color: var(--text); }
+.note { color: var(--text-muted); font-size: 0.85rem; }
+.group-title {
+  margin: 24px 0 10px; color: var(--text-muted); font-family: var(--font-display); font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase;
+}
+.slots { display: grid; gap: 10px; }
+.slot {
+  display: grid; grid-template-columns: 132px minmax(0, 1fr) auto; align-items: center; gap: 14px; padding: 12px;
+  border: 1px solid var(--border-dim); border-radius: 8px; background: var(--bg-card);
+}
+.slot.is-empty { border-style: dashed; border-color: rgba(224, 163, 58, 0.35); }
+.thumb {
+  display: flex; align-items: center; justify-content: center; width: 132px; aspect-ratio: 16 / 10; overflow: hidden;
+  border-radius: 6px; background: var(--bg-dark); color: var(--text-muted); font-size: 0.75rem;
+}
+.thumb img, .thumb video { display: block; width: 100%; height: 100%; object-fit: cover; }
+.slot-name { font-weight: 600; }
+.slot-where { color: var(--text-muted); font-size: 0.82rem; }
+.chip { display: inline-block; margin-top: 6px; padding: 2px 8px; border: 1px solid var(--border-strong); border-radius: 999px; color: var(--text-muted); font-size: 0.72rem; }
+.chip.up { border-color: rgba(63, 178, 127, 0.5); color: var(--ok); }
+.chip.empty { border-color: rgba(224, 163, 58, 0.5); color: var(--warn); }
+.actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+
+/* Galeri sekmesi */
+.gal-bar { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; margin: 8px 0 10px; }
+label.inline { margin: 0; }
+label.inline select { display: block; margin-top: 4px; }
+select, .gal-fields input[type=text], .pos {
+  height: 38px; padding: 0 10px; border: 1px solid var(--border-strong); border-radius: 6px;
+  background: var(--bg-dark); color: var(--text); font: inherit; font-size: 0.85rem;
+}
+select:focus-visible, .gal-fields input:focus-visible, .pos:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.gal-fields { display: grid; gap: 6px; }
+.gal-fields select { justify-self: start; }
+.pos { width: 64px; }
+.gal-empty { margin: 12px 0; color: var(--text-muted); }
+
+#toasts {
+  position: fixed; left: 50%; bottom: 20px; z-index: 50; display: flex; flex-direction: column; align-items: center; gap: 8px;
+  width: max-content; max-width: calc(100vw - 32px); transform: translateX(-50%); pointer-events: none;
+}
+.toast {
+  max-width: 100%; padding: 10px 16px; pointer-events: auto;
+  border: 1px solid var(--border-strong); border-radius: 6px; background: var(--bg-raised); box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4);
+}
+.toast.err { border-color: rgba(229, 83, 75, 0.6); }
+.toast.ok { border-color: rgba(63, 178, 127, 0.6); }
+
+@media (max-width: 640px) {
+  .slot { grid-template-columns: 96px minmax(0, 1fr); }
+  .thumb { width: 96px; }
+  .actions { grid-column: 1 / -1; justify-content: flex-start; }
+  header .who { display: none; }
+}

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Site görselleri · BFL'Y</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#0D1117" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/brand/favicon-32.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Orbitron:wght@600;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/yonetim.css" />
+  <script type="module" src="/js/yonetim.js"></script>
+</head>
+<body>
+  <header>
+    <a href="/"><img src="/assets/images/brand/LogoButun.png" alt="BFL'Y" /></a>
+    <span class="title">Site görselleri</span>
+    <span class="spacer"></span>
+    <span class="who" id="who"></span>
+    <button type="button" class="btn" id="logoutBtn" hidden>Çıkış</button>
+  </header>
+  <main>
+    <section class="card login" id="loginCard" hidden>
+      <h1>Yönetim</h1>
+      <p class="sub">Portal hesabınla giriş yap. Sadece portal adminleri görsel yükleyebilir.</p>
+      <form id="loginForm" novalidate>
+        <label for="email">E-posta</label>
+        <input type="email" id="email" autocomplete="username" required />
+        <label for="password">Şifre</label>
+        <input type="password" id="password" autocomplete="current-password" required />
+        <p class="error" id="loginError"></p>
+        <button type="submit" class="btn btn-primary btn-block" id="loginBtn">Giriş yap</button>
+      </form>
+    </section>
+
+    <section class="card login" id="denied" hidden>
+      <h1>Yetki yok</h1>
+      <p class="sub">Bu sayfa sadece portal adminleri için. Görsel eklenmesini istiyorsan admine yaz.</p>
+    </section>
+
+    <section id="panel" hidden>
+      <h1>Site görselleri</h1>
+      <p class="sub">Araç sayfalarındaki görsel/videolar ve galeri. Yüklediğin dosya sitede hemen görünür; "Kaldır" deyince alan
+        eski haline döner. Fotoğraflar yüklenirken küçültülür; videolar en fazla 50 MB (MP4 en iyisi).</p>
+      <div class="tabs" id="tabs">
+        <button type="button" data-page="delifisek" class="active">DeliFişek</button>
+        <button type="button" data-page="turcofighter">TurcoFighter</button>
+        <button type="button" data-page="galeri">Galeri</button>
+      </div>
+      <p class="note" id="summary"></p>
+      <div id="groups"></div>
+    </section>
+  </main>
+</body>
+</html>

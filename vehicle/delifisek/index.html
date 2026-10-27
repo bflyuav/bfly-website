@@ -156,7 +156,7 @@
 
       <div class="feature-slide">
         <div class="feature-slide-inner">
-          <div class="feature-media">
+          <div class="feature-media" data-slot-box="df-govde">
             <div class="feature-media-label" data-i18n="df_feat1_label">Tam Karbon Fiber Gövde</div>
             <img src="/assets/images/vehicles/body.jpg" onerror="this.style.display='none'" alt="Gövde" />
             <div class="feature-media-placeholder">
@@ -173,7 +173,7 @@
 
       <div class="feature-slide">
         <div class="feature-slide-inner">
-          <div class="feature-media">
+          <div class="feature-media" data-slot-box="df-moduler">
             <div class="feature-media-label" data-i18n="df_feat2_label">Modüler Yapı</div>
             <img src="/assets/images/delifisek-payload.jpeg" alt="Sökülebilir kanat ve kuyruk" onerror="this.style.opacity='0'" />
             <div class="feature-media-placeholder">
@@ -190,7 +190,7 @@
 
       <div class="feature-slide">
         <div class="feature-slide-inner">
-          <div class="feature-media">
+          <div class="feature-media" data-slot-box="df-otonom">
             <div class="feature-media-label" data-i18n="df_feat3_label">Otonom Yapı</div>
             <video autoplay muted loop playsinline src="/assets/videos/delifisek-nav.mp4" onerror="this.style.display='none'"></video>
             <div class="feature-media-placeholder">
@@ -207,7 +207,7 @@
 
       <div class="feature-slide">
         <div class="feature-slide-inner">
-          <div class="feature-media">
+          <div class="feature-media" data-slot-box="df-aviyonik">
             <div class="feature-media-label" data-i18n="df_feat4_label">Aviyonik</div>
             <img src="/assets/images/delifisek-avionics.jpeg" alt="Aviyonik yığın" onerror="this.style.opacity='0'" />
             <div class="feature-media-placeholder">
@@ -251,6 +251,7 @@
         src="/assets/images/vehicles/delifisek-design.jpg"
         alt="DeliFisek top-down design view"
         class="design-drone-img"
+        data-slot="df-tasarim"
         onerror="this.closest('.design-drone-showcase').style.display='none'"
       />
       <div class="design-glow"></div>
@@ -327,7 +328,7 @@
     <div class="close-look-grid">
       <div class="accordion-list" id="accordionList">
         <div class="accordion-item">
-          <button class="accordion-trigger active" data-image="delifisek-detail-frame.jpg" data-label-tr="Kanat Yapısı" data-label-en="Wing Structure">
+          <button class="accordion-trigger active" data-image="delifisek-detail-frame.jpg" data-slot="df-detay-kanat" data-label-tr="Kanat Yapısı" data-label-en="Wing Structure">
             <span class="accordion-icon">+</span>
             <span class="accordion-label" data-i18n="df_cl1_label">Kanat Yapısı</span>
           </button>
@@ -336,7 +337,7 @@
           </div>
         </div>
         <div class="accordion-item">
-          <button class="accordion-trigger" data-image="delifisek-detail-motors.jpg" data-label-tr="V Kuyruk Yapısı" data-label-en="V-Tail Structure">
+          <button class="accordion-trigger" data-image="delifisek-detail-motors.jpg" data-slot="df-detay-vkuyruk" data-label-tr="V Kuyruk Yapısı" data-label-en="V-Tail Structure">
             <span class="accordion-icon">+</span>
             <span class="accordion-label" data-i18n="df_cl2_label">V Kuyruk Yapısı</span>
           </button>
@@ -345,7 +346,7 @@
           </div>
         </div>
         <div class="accordion-item">
-          <button class="accordion-trigger" data-image="delifisek-detail-avionics.jpg" data-label-tr="Tek Parça Gövde" data-label-en="One-Piece Body">
+          <button class="accordion-trigger" data-image="delifisek-detail-avionics.jpg" data-slot="df-detay-govde" data-label-tr="Tek Parça Gövde" data-label-en="One-Piece Body">
             <span class="accordion-icon">+</span>
             <span class="accordion-label" data-i18n="df_cl3_label">Tek Parça Gövde</span>
           </button>
@@ -354,7 +355,7 @@
           </div>
         </div>
         <div class="accordion-item">
-          <button class="accordion-trigger" data-image="delifisek-detail-payload.jpg" data-label-tr="Faydalı Yük Bölmesi" data-label-en="Payload Bay">
+          <button class="accordion-trigger" data-image="delifisek-detail-payload.jpg" data-slot="df-detay-yuk" data-label-tr="Faydalı Yük Bölmesi" data-label-en="Payload Bay">
             <span class="accordion-icon">+</span>
             <span class="accordion-label" data-i18n="df_cl4_label">Faydalı Yük Bölmesi</span>
           </button>
@@ -363,7 +364,7 @@
           </div>
         </div>
         <div class="accordion-item">
-          <button class="accordion-trigger" data-image="delifisek-detail-battery.jpg" data-label-tr="Güç Sistemi" data-label-en="Power System">
+          <button class="accordion-trigger" data-image="delifisek-detail-battery.jpg" data-slot="df-detay-guc" data-label-tr="Güç Sistemi" data-label-en="Power System">
             <span class="accordion-icon">+</span>
             <span class="accordion-label" data-i18n="df_cl5_label">Güç Sistemi</span>
           </button>
@@ -436,6 +437,7 @@
             alt="DeliFisek zoom view"
             class="drone-3d-img"
             id="drone3dImg"
+            data-slot="df-zoom"
             onerror="this.style.opacity='0.2'"
           />
         </div>
@@ -577,25 +579,25 @@
       <button class="gallery-tab" data-tab="videos" data-i18n="df_gallery_tab_videos">Videos</button>
     </div>
     <div class="gallery-grid reveal">
-      <div class="gallery-item">
+      <div class="gallery-item" data-slot-box="df-medya-1">
         <div class="gallery-placeholder">
           <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
         </div>
         <div class="gallery-item-label" data-i18n="df_gallery1">Speed Run Track Day</div>
       </div>
-      <div class="gallery-item">
+      <div class="gallery-item" data-slot-box="df-medya-2">
         <div class="gallery-placeholder">
           <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8"><polygon points="5 3 19 12 5 21 5 3"/></svg>
         </div>
         <div class="gallery-item-label" data-i18n="df_gallery2">Autonomous Waypoint Mission</div>
       </div>
-      <div class="gallery-item">
+      <div class="gallery-item" data-slot-box="df-medya-3">
         <div class="gallery-placeholder">
           <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
         </div>
         <div class="gallery-item-label" data-i18n="df_gallery3">Avionics Build</div>
       </div>
-      <div class="gallery-item">
+      <div class="gallery-item" data-slot-box="df-medya-4">
         <div class="gallery-placeholder">
           <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
         </div>
@@ -626,6 +628,7 @@
 </section>
 
 <script src="/js/components.js"></script>
+<script src="/js/site-media.js"></script>
 <script src="/js/vehicle-delifisek.js"></script>
 </body>
 </html>

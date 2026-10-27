@@ -41,204 +41,27 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ===== GALLERY DATA =====
-     Yeni fotoğraf eklemek için PHOTOS dizisine nesne ekleyin.
-     Alanlar:
-       src        : görsel yolu, örn. "/assets/images/foto.jpg"
-       alt_en     : İngilizce alt text
-       alt_tr     : Türkçe alt text
-       caption_en : İngilizce başlık (hover'da ve lightbox'ta görünür)
-       caption_tr : Türkçe başlık
-       category   : "flight" | "build" | "team" | "competition"
+     Fotoğraflar bflyuav.com/yonetim/ sayfasından (Galeri sekmesi) eklenir
+     ve sıralanır. Liste portalın Supabase'inde (site_gallery, herkese açık);
+     dosyalar "site" klasöründe: galeri/<id>.jpg, küçüğü galeri/<id>-k.jpg
   ===== */
-  const PHOTOS = [
-    {
-      src: '/assets/images/gallery/1.jpeg',
-      alt_en: 'DeliFisek first flight', alt_tr: 'DeliFişek ilk uçuş',
-      caption_en: 'First flight — June 2024', caption_tr: 'İlk uçuş — Haziran 2024',
-      category: 'team'
-    },
-    {
-      src: '/assets/images/gallery/2.jpeg',
-      alt_en: 'DeliFisek team photo', alt_tr: 'DeliFişek takımlı fotoğraf',
-      caption_en: 'Team photo — June 2024', caption_tr: 'Takımlı fotoğraf — Haziran 2024',
-      category: 'flight'
-    },
-    {
-      src: '/assets/images/gallery/3.jpg',
-      alt_en: 'Teknofest photo', alt_tr: 'Teknofest fotoğrafı',
-      caption_en: 'Competition photo — June 2024', caption_tr: 'Yarışma fotoğrafı — Haziran 2024',
-      category: 'team'
-    },
-    {
-      src: '/assets/images/gallery/4.jpg',
-      alt_en: 'DeliFisek first flight', alt_tr: 'DeliFişek ilk uçuş',
-      caption_en: '', caption_tr: '',
-      category: 'flight'
-    },
-    {
-      src: '/assets/images/gallery/5.jpg',
-      alt_en: 'DeliFisek team photo', alt_tr: 'DeliFişek takımlı fotoğraf',
-      caption_en: '', caption_tr: '',
-      category: 'build'
-    },
-    {
-      src: '/assets/images/gallery/6.jpg',
-      alt_en: 'Teknofest photo', alt_tr: 'Teknofest fotoğrafı',
-      caption_en: '', caption_tr: '',
-      category: 'flight'
-    },
-    {
-      src: '/assets/images/gallery/7.jpg',
-      alt_en: 'DeliFisek first flight', alt_tr: 'DeliFişek ilk uçuş',
-      caption_en: '', caption_tr: '',
-      category: 'team'
-    },
-    {
-      src: '/assets/images/gallery/8.jpg',
-      alt_en: 'DeliFisek team photo', alt_tr: 'DeliFişek takımlı fotoğraf',
-      caption_en: '', caption_tr: '',
-      category: 'team'
-    },
-    {
-      src: '/assets/images/gallery/9.jpg',
-      alt_en: 'Teknofest photo', alt_tr: 'Teknofest fotoğrafı',
-      caption_en: '', caption_tr: '',
-      category: 'team'
-    },
-    {
-      src: '/assets/images/gallery/10.jpg',
-      alt_en: 'DeliFisek first flight', alt_tr: 'DeliFişek ilk uçuş',
-      caption_en: '', caption_tr: '',
-      category: 'flight'
-    },
-    {
-      src: '/assets/images/gallery/11.jpg',
-      alt_en: 'DeliFisek team photo', alt_tr: 'DeliFişek takımlı fotoğraf',
-      caption_en: '', caption_tr: '',
-      category: 'flight'
-    },
-    {
-      src: '/assets/images/gallery/12.jpg',
-      alt_en: 'Teknofest photo', alt_tr: 'Teknofest fotoğrafı',
-      caption_en: '', caption_tr: '',
-      category: 'team'
-    },
-    {
-      src: '/assets/images/gallery/13.jpg',
-      alt_en: 'DeliFisek first flight', alt_tr: 'DeliFişek ilk uçuş',
-      caption_en: '', caption_tr: '',
-      category: 'team'
-    },
-    {
-      src: '/assets/images/gallery/14.jpg',
-      alt_en: 'DeliFisek team photo', alt_tr: 'DeliFişek takımlı fotoğraf',
-      caption_en: '', caption_tr: '',
-      category: 'team'
-    },
-    {
-      src: '/assets/images/gallery/15.jpg',
-      alt_en: 'Teknofest photo', alt_tr: 'Teknofest fotoğrafı',
-      caption_en: '', caption_tr: '',
-      category: 'team'
-    },
-    {
-      src: '/assets/images/gallery/16.jpg',
-      alt_en: 'DeliFisek first flight', alt_tr: 'DeliFişek ilk uçuş',
-      caption_en: '', caption_tr: '',
-      category: 'build'
-    },
-    {
-      src: '/assets/images/gallery/17.jpg',
-      alt_en: 'DeliFisek team photo', alt_tr: 'DeliFişek takımlı fotoğraf',
-      caption_en: '', caption_tr: '',
-      category: 'build'
-    },
-    {
-      src: '/assets/images/gallery/18.jpg',
-      alt_en: 'Teknofest photo', alt_tr: 'Teknofest fotoğrafı',
-      caption_en: '', caption_tr: '',
-      category: 'flight'
-    },
-    {
-      src: '/assets/images/gallery/19.jpg',
-      alt_en: 'DeliFisek first flight', alt_tr: 'DeliFişek ilk uçuş',
-      caption_en: '', caption_tr: '',
-      category: 'build'
-    },
-    {
-      src: '/assets/images/gallery/20.jpg',
-      alt_en: 'DeliFisek team photo', alt_tr: 'DeliFişek takımlı fotoğraf',
-      caption_en: '', caption_tr: '',
-      category: 'flight'
-    },
-    {
-      src: '/assets/images/gallery/21.jpg',
-      alt_en: 'Teknofest photo', alt_tr: 'Teknofest fotoğrafı',
-      caption_en: '', caption_tr: '',
-      category: 'build'
-    },
-    {
-      src: '/assets/images/gallery/22.jpg',
-      alt_en: 'DeliFisek first flight', alt_tr: 'DeliFişek ilk uçuş',
-      caption_en: '', caption_tr: '',
-      category: 'none'
-    },
-    {
-      src: '/assets/images/gallery/23.jpg',
-      alt_en: 'DeliFisek team photo', alt_tr: 'DeliFişek takımlı fotoğraf',
-      caption_en: '', caption_tr: '',
-      category: 'none'
-    },
-    {
-      src: '/assets/images/gallery/24.jpg',
-      alt_en: 'Teknofest photo', alt_tr: 'Teknofest fotoğrafı',
-      caption_en: '', caption_tr: '',
-      category: 'build'
-    },
-    {
-      src: '/assets/images/gallery/25.jpg',
-      alt_en: 'DeliFisek first flight', alt_tr: 'DeliFişek ilk uçuş',
-      caption_en: '', caption_tr: '',
-      category: 'team'
-    },
-    {
-      src: '/assets/images/gallery/26.jpg',
-      alt_en: 'DeliFisek team photo', alt_tr: 'DeliFişek takımlı fotoğraf',
-      caption_en: '', caption_tr: '',
-      category: 'flight'
-    },
-    {
-      src: '/assets/images/gallery/27.jpg',
-      alt_en: 'Teknofest photo', alt_tr: 'Teknofest fotoğrafı',
-      caption_en: '', caption_tr: '',
-      category: 'flight'
-    },
-    {
-      src: '/assets/images/gallery/28.jpg',
-      alt_en: 'DeliFisek team photo', alt_tr: 'DeliFişek takımlı fotoğraf',
-      caption_en: '', caption_tr: '',
-      category: 'build'
-    },
-    {
-      src: '/assets/images/gallery/29.jpg',
-      alt_en: 'Teknofest photo', alt_tr: 'Teknofest fotoğrafı',
-      caption_en: '', caption_tr: '',
-      category: 'build'
-    },
-  ];
+  const SUPA = 'https://bzkgwrualpstpqmmqcug.supabase.co';
+  const SUPA_KEY = 'sb_publishable_qKVIZbIBB3ms2NGX5uCGjA_y1D3vy2U';   // herkese açık anahtar (gizli değil)
+  let PHOTOS = null;   // null: yükleniyor
 
-  /* ===== PLACEHOLDER LIST (fotoğraf yokken gösterilir) ===== */
-  const PLACEHOLDERS = [
-    { num: '01', category: 'flight'      },
-    { num: '02', category: 'build'       },
-    { num: '03', category: 'team'        },
-    { num: '04', category: 'competition' },
-    { num: '05', category: 'flight'      },
-    { num: '06', category: 'build'       },
-    { num: '07', category: 'team'        },
-    { num: '08', category: 'competition' },
-    { num: '09', category: 'flight'      },
-  ];
+  function loadPhotos() {
+    const file = (path) => `${SUPA}/storage/v1/object/public/site/${path}`;
+    return fetch(`${SUPA}/rest/v1/site_gallery?select=path,category,caption_tr,caption_en&order=sort_order.asc`,
+      { headers: { apikey: SUPA_KEY } })
+      .then(r => (r.ok ? r.json() : []))
+      .catch(() => [])
+      .then(rows => rows.map(r => ({
+        src: file(r.path.replace(/\.(jpg|png|webp)$/, '-k.jpg')),
+        full: file(r.path),
+        caption_tr: r.caption_tr, caption_en: r.caption_en,
+        category: r.category,
+      })));
+  }
 
   /* ===== HELPERS ===== */
   function t(key) {
@@ -248,8 +71,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function field(obj, key) {
     const lang = window.BFLY_CURRENT_LANG || 'en';
-    return obj[`${key}_${lang}`] || obj[`${key}_en`] || '';
+    return obj[`${key}_${lang}`] || obj[`${key}_tr`] || obj[`${key}_en`] || '';
   }
+
+  const esc = (v) => String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
   /* ===== FILTER PILLS ===== */
   const FILTERS = ['all', 'flight', 'build', 'team', 'competition'];
@@ -277,39 +102,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const grid = document.getElementById('galleryGrid');
     if (!grid) return;
 
-    const hasReal = PHOTOS.length > 0;
-    const source  = hasReal ? PHOTOS : PLACEHOLDERS;
+    if (PHOTOS === null) { grid.innerHTML = ''; return; }
 
     const filtered = (filter === 'all')
-      ? source
-      : source.filter(p => p.category === filter);
+      ? PHOTOS
+      : PHOTOS.filter(p => p.category === filter);
 
     if (filtered.length === 0) {
       grid.innerHTML = `<p style="color:var(--text-muted);font-family:var(--font-display);font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;padding:48px 0;">${t('gallery_coming_soon')}</p>`;
       return;
     }
 
-    if (hasReal) {
-      grid.innerHTML = filtered.map((photo, i) => `
+    grid.innerHTML = filtered.map((photo, i) => {
+      const caption = field(photo, 'caption');
+      return `
         <div class="gallery-item" data-index="${i}" data-category="${photo.category}">
-          <img src="${photo.src}" alt="${field(photo, 'alt')}" loading="lazy" />
+          <img src="${esc(photo.src)}" data-full="${esc(photo.full)}" alt="${esc(caption || "BFL'Y")}" loading="lazy"
+            onerror="this.onerror=null;this.src=this.dataset.full" />
           <span class="gallery-tag">${t(`gallery_filter_${photo.category}`)}</span>
-          <span class="gallery-caption">${field(photo, 'caption')}</span>
-        </div>
-      `).join('');
+          ${caption ? `<span class="gallery-caption">${esc(caption)}</span>` : ''}
+        </div>`;
+    }).join('');
 
-      /* Re-index for lightbox after filtering */
-      buildLightboxList();
-    } else {
-      grid.innerHTML = filtered.map(p => `
-        <div class="gallery-item placeholder" data-category="${p.category}">
-          <div class="placeholder-inner">
-            <span class="placeholder-num">${p.num}</span>
-            <span class="placeholder-label">${t(`gallery_filter_${p.category}`)}</span>
-          </div>
-        </div>
-      `).join('');
-    }
+    /* Re-index for lightbox after filtering */
+    buildLightboxList();
 
     /* Attach click listeners */
     grid.querySelectorAll('.gallery-item:not(.placeholder)').forEach((item, i) => {
@@ -352,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function updateLightbox() {
     const img = images[currentIndex];
-    lightboxImg.src = img.src;
+    lightboxImg.src = img.dataset.full || img.src;
     lightboxImg.alt = img.alt;
     if (lightboxCap)   lightboxCap.textContent   = img.closest('.gallery-item')?.querySelector('.gallery-caption')?.textContent || '';
     if (lightboxCount) lightboxCount.textContent  = `${currentIndex + 1} / ${images.length}`;
@@ -396,4 +212,8 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ===== INIT ===== */
   buildFilters();
   renderGrid('all');
+  loadPhotos().then(photos => {
+    PHOTOS = photos;
+    renderGrid(document.querySelector('.gallery-pill.active')?.dataset.filter || 'all');
+  });
 });
