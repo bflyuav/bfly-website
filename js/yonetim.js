@@ -5,7 +5,8 @@
    dosya "site" klasörüne alan adıyla yüklenir, site_media
    tablosuna yazılır; sayfalar site-media.js ile gösterir.
    Galeri sekmesi galeri sayfasının fotoğraflarını ekler, sıralar,
-   siler (site_gallery tablosu).
+   siler (site_gallery tablosu). Metinler sekmesi sitedeki yazıları
+   değiştirir (site_text tablosu; sayfalar site-text.js ile uygular).
    ============================================= */
 
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3/+esm';
@@ -62,6 +63,7 @@ let rows = new Map();   // slot → { content_type, updated_at }
 let gallery = [];       // galeri sırasıyla { id, path, category, caption_tr, caption_en }
 let galCat = 'team';    // yeni fotoğrafların kategorisi
 let uploading = false;
+let texts = new Map();  // değiştirilen yazılar: anahtar → { tr, en }
 
 function toast(msg, kind = '') {
   const t = document.createElement('div');
@@ -129,17 +131,19 @@ $('#logoutBtn').addEventListener('click', async () => {
 /* ---------- Liste ---------- */
 
 async function load() {
-  const [media, gal] = await Promise.all([
+  const [media, gal, txt] = await Promise.all([
     supabase.from('site_media').select('slot, content_type, updated_at'),
     supabase.from('site_gallery').select('id, path, category, caption_tr, caption_en').order('sort_order'),
+    supabase.from('site_text').select('key, tr, en'),
   ]);
-  const error = media.error || gal.error;
+  const error = media.error || gal.error || txt.error;
   if (error) {
     toast(`Liste alınamadı: ${error.message}`, 'err');
     return;
   }
   rows = new Map(media.data.map((r) => [r.slot, r]));
   gallery = gal.data;
+  texts = new Map(txt.data.map((r) => [r.key, { tr: r.tr, en: r.en }]));
   render();
 }
 
@@ -157,6 +161,10 @@ function render() {
   $$tabs();
   if (page === 'galeri') {
     renderGallery();
+    return;
+  }
+  if (page === 'metinler') {
+    renderTexts();
     return;
   }
   const list = SLOTS.filter((s) => s.page === page);
@@ -196,7 +204,7 @@ function $$tabs() {
 
 $('#tabs').addEventListener('click', (e) => {
   const b = e.target.closest('[data-page]');
-  if (!b) return;
+  if (!b || (page === 'metinler' && b.dataset.page !== page && !leaveTexts())) return;
   page = b.dataset.page;
   render();
 });
@@ -437,6 +445,255 @@ $('#groups').addEventListener('click', (e) => {
   } else if (del) {
     deleteGallery(row.dataset.id);
   }
+});
+
+/* ---------- Metinler ----------
+   Sayfanın varsayılan yazıları, sayfa gizli bir çerçevede ?varsayilan ile
+   açılarak okunur (site-text.js o zaman değişiklik uygulamaz): data-i18n
+   anahtarları + çevirileri, body'deki sayfa başlığı, data-text öğeleri.
+   Böylece sitede yeni bir yazı eklenince panel ayrıca güncellenmez. */
+
+const TEXT_PAGES = [
+  { id: 'home', path: '/', name: 'Ana sayfa' },
+  { id: 'team', path: '/team', name: 'Takım' },
+  { id: 'vehicle', path: '/vehicle', name: 'Araçlar' },
+  { id: 'vehicle/delifisek', path: '/vehicle/delifisek', name: 'DeliFişek' },
+  { id: 'vehicle/turcofighter', path: '/vehicle/turcofighter', name: 'TurcoFighter (sadece Türkçe)' },
+  { id: 'sponsors', path: '/sponsors', name: 'Sponsorlar' },
+  { id: 'contact', path: '/contact', name: 'İletişim' },
+  { id: 'gallery', path: '/gallery', name: 'Galeri' },
+  { id: 'blog', path: '/blog', name: 'Blog' },
+  { id: 'ortak', path: '/', name: 'Menü ve alt bilgi (her sayfada)' },
+];
+const KINDS = { H1: 'Başlık', H2: 'Başlık', H3: 'Ara başlık', H4: 'Ara başlık', P: 'Yazı', LI: 'Madde', A: 'Bağlantı', BUTTON: 'Buton' };
+const catalog = new Map();   // sayfa id → { bilingual, items: [{ key, kind, tr, en, group }] }
+let textPage = 'home';
+let textQuery = '';
+
+// HTML → kutuda düzenlenen yazı: <br> satır sonu olur, &amp; gibi kodlar çözülür
+function toEdit(html) {
+  const t = document.createElement('textarea');
+  t.innerHTML = String(html ?? '').replace(/\s+/g, ' ').replace(/\s*<br\s*\/?>\s*/gi, '\n');
+  return t.value.split('\n').map((l) => l.trim()).join('\n').trim();
+}
+const plain = (html) => toEdit(html).replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+
+function collectTexts(w, p) {
+  const d = w.document;
+  const T = w.BFLY_TRANSLATIONS;
+  const items = [];
+  const seen = new Set();
+  const shared = (el) => el.closest('#navbar, .navbar, .mobile-menu, #mobileMenu, footer, .footer');
+  const groupOf = (el) => {
+    if (el.closest('nav, .navbar, .mobile-menu')) return 'Menü';
+    if (el.closest('footer, .footer')) return 'Alt bilgi';
+    const sec = el.closest('section, header, article, aside');
+    const h = sec?.querySelector('h1, h2');
+    if (!h) return 'Diğer';
+    const k = h.dataset.i18n;
+    return plain(k && T?.tr?.[k] !== undefined ? T.tr[k] : h.innerHTML).slice(0, 70) || 'Diğer';
+  };
+  const add = (it) => {
+    if (seen.has(it.key)) return;
+    seen.add(it.key);
+    items.push({ ...it, tr: toEdit(it.tr), en: toEdit(it.en) });
+  };
+  if (p.id !== 'ortak' && d.body.dataset.pageHero === 'true') {
+    for (const part of ['eyebrow', 'title', 'desc']) {
+      const P = part[0].toUpperCase() + part.slice(1);
+      const tr = d.body.dataset[`hero${P}Tr`] || '';
+      const en = d.body.dataset[`hero${P}En`] || '';
+      if (tr || en) {
+        add({ key: `hero.${p.id}.${part}`, kind: { eyebrow: 'Üst yazı', title: 'Başlık', desc: 'Açıklama' }[part], tr, en, group: 'Sayfanın üstü' });
+      }
+    }
+  }
+  d.querySelectorAll('[data-i18n], [data-text]').forEach((el) => {
+    if (p.id === 'ortak' ? !shared(el) : shared(el)) return;
+    const key = el.dataset.i18n || el.dataset.text;
+    const i18n = Boolean(el.dataset.i18n && T);
+    add({
+      key,
+      kind: KINDS[el.tagName] || 'Etiket',
+      tr: i18n ? T.tr?.[key] ?? el.innerHTML : el.innerHTML,
+      en: i18n ? T.en?.[key] ?? el.innerHTML : '',
+      group: groupOf(el),
+    });
+  });
+  return { bilingual: Boolean(T), items };
+}
+
+function readPage(p) {
+  return new Promise((resolve, reject) => {
+    const f = document.createElement('iframe');
+    f.className = 'reader';
+    f.tabIndex = -1;
+    f.setAttribute('aria-hidden', 'true');
+    f.src = `${p.path}?varsayilan=1`;
+    const timer = setTimeout(() => {
+      f.remove();
+      reject(new Error('Sayfa açılamadı, tekrar dene.'));
+    }, 25000);
+    f.addEventListener('load', () => {
+      setTimeout(() => {   // sayfanın kendi betikleri (DOMContentLoaded) bitsin
+        clearTimeout(timer);
+        try {
+          resolve(collectTexts(f.contentWindow, p));
+        } catch (err) {
+          reject(err);
+        } finally {
+          f.remove();
+        }
+      }, 400);
+    }, { once: true });
+    document.body.append(f);
+  });
+}
+
+const textRows = () => [...document.querySelectorAll('.text-row')];
+const isDirty = (row) => [...row.querySelectorAll('textarea')].some((t) => t.value !== t.defaultValue);
+const leaveTexts = () => !textRows().some(isDirty) || confirm('Kaydedilmemiş yazı değişiklikleri var. Yine de çıkılsın mı?');
+
+function textArea(item, lang, bilingual) {
+  const o = texts.get(item.key);
+  const value = o?.[lang] ?? item[lang];
+  const lines = value.split('\n').length + Math.floor(value.length / 90);
+  const label = bilingual ? (lang === 'tr' ? 'Türkçe' : 'İngilizce') : 'Yazı';
+  const hint = lang === 'en' && !item.en ? 'Boşsa Türkçesi görünür' : '';
+  return `<label class="text-field"><span>${label}</span>
+    <textarea data-lang="${lang}" rows="${Math.min(8, Math.max(1, lines))}" maxlength="4000" placeholder="${hint}">${esc(value)}</textarea></label>`;
+}
+
+function textRowState(row) {
+  const changed = texts.has(row.dataset.key);
+  row.querySelector('.chip').hidden = !changed;
+  row.querySelector('[data-text-reset]').hidden = !changed;
+  row.querySelector('[data-text-save]').disabled = !isDirty(row);
+}
+
+function renderTexts() {
+  const p = TEXT_PAGES.find((x) => x.id === textPage);
+  const cat = catalog.get(textPage);
+  const options = TEXT_PAGES.map((x) => `<option value="${x.id}"${x.id === textPage ? ' selected' : ''}>${esc(x.name)}</option>`).join('');
+  const bar = `
+    <div class="gal-bar">
+      <label class="inline" for="textPage">Sayfa <select id="textPage">${options}</select></label>
+      <label class="inline grow" for="textSearch">Ara
+        <input type="search" id="textSearch" value="${esc(textQuery)}" placeholder="Yazının içinden bir kelime" /></label>
+    </div>
+    <p class="note">Yazıyı değiştirip <b>Kaydet</b>'e bas; sitede hemen görünür. Yeni satır için Enter. Vurgulu kelime:
+      &lt;em&gt;kelime&lt;/em&gt;. "Varsayılana dön" koddaki asıl yazıya döndürür.</p>`;
+  if (!cat) {
+    $('#summary').innerHTML = `<a href="${p.path}" target="_blank" rel="noopener">Sayfayı aç ↗</a>`;
+    $('#groups').innerHTML = `${bar}<div class="card gal-empty" id="textLoading">Sayfanın yazıları okunuyor…</div>`;
+    readPage(p).then((c) => {
+      catalog.set(p.id, c);
+      if (page === 'metinler' && textPage === p.id) renderTexts();
+    }).catch((err) => {
+      const box = $('#textLoading');
+      if (box) box.textContent = err.message;
+    });
+    return;
+  }
+  const changed = cat.items.filter((it) => texts.has(it.key)).length;
+  $('#summary').innerHTML = `${cat.items.length} yazı · ${changed} değiştirildi · `
+    + `<a href="${p.path}" target="_blank" rel="noopener">Sayfayı aç ↗</a>`;
+  const groups = [...new Set(cat.items.map((it) => it.group))];
+  $('#groups').innerHTML = bar + (cat.items.length ? '' : '<div class="card gal-empty">Bu sayfada düzenlenebilir yazı yok.</div>')
+    + groups.map((g) => `
+    <section class="text-group">
+      <h2 class="group-title">${esc(g)}</h2>
+      <div class="slots">${cat.items.filter((it) => it.group === g).map((it) => `
+        <div class="slot text-row" data-key="${esc(it.key)}">
+          <div class="text-head">
+            <span class="slot-where">${esc(it.kind)}</span>
+            <span class="chip up" hidden>Değiştirildi</span>
+          </div>
+          <div class="text-fields${cat.bilingual ? ' two' : ''}">
+            ${textArea(it, 'tr', cat.bilingual)}${cat.bilingual ? textArea(it, 'en', true) : ''}
+          </div>
+          <div class="actions">
+            <button type="button" class="btn btn-primary" data-text-save disabled>Kaydet</button>
+            <button type="button" class="btn" data-text-reset hidden>Varsayılana dön</button>
+          </div>
+        </div>`).join('')}</div>
+    </section>`).join('');
+  textRows().forEach(textRowState);
+  filterTexts();
+}
+
+function filterTexts() {
+  const q = textQuery.trim().toLocaleLowerCase('tr');
+  document.querySelectorAll('.text-group').forEach((g) => {
+    let any = false;
+    g.querySelectorAll('.text-row').forEach((row) => {
+      const hay = [...row.querySelectorAll('textarea')].map((t) => t.value).join(' ').toLocaleLowerCase('tr');
+      row.hidden = Boolean(q) && !hay.includes(q);
+      any ||= !row.hidden;
+    });
+    g.hidden = !any;
+  });
+}
+
+async function saveText(row, reset) {
+  const key = row.dataset.key;
+  const item = catalog.get(textPage).items.find((it) => it.key === key);
+  const val = (lang) => {
+    const t = row.querySelector(`textarea[data-lang="${lang}"]`);
+    const v = t ? t.value.replace(/\r/g, '').trim() : '';
+    return !reset && v && v !== item[lang] ? v : null;
+  };
+  const next = { tr: val('tr'), en: val('en') };
+  row.querySelectorAll('button').forEach((b) => { b.disabled = true; });
+  const { error } = await supabase.rpc('set_site_text', { p_key: key, p_tr: next.tr, p_en: next.en });
+  row.querySelectorAll('button').forEach((b) => { b.disabled = false; });
+  if (error) {
+    toast(error.message, 'err');
+    textRowState(row);
+    return;
+  }
+  if (next.tr || next.en) texts.set(key, next);
+  else texts.delete(key);
+  row.querySelectorAll('textarea').forEach((t) => {
+    if (reset) t.value = item[t.dataset.lang];
+    t.defaultValue = t.value;
+  });
+  textRowState(row);
+  const cat = catalog.get(textPage);
+  const changed = cat.items.filter((it) => texts.has(it.key)).length;
+  $('#summary').firstChild.textContent = `${cat.items.length} yazı · ${changed} değiştirildi · `;
+  toast(next.tr || next.en ? 'Kaydedildi, sitede görünüyor.' : 'Varsayılana döndü.', 'ok');
+}
+
+$('#groups').addEventListener('input', (e) => {
+  if (e.target.id === 'textSearch') {
+    textQuery = e.target.value;
+    filterTexts();
+  } else if (e.target.matches('.text-row textarea')) {
+    textRowState(e.target.closest('.text-row'));
+  }
+});
+
+$('#groups').addEventListener('change', (e) => {
+  if (e.target.id !== 'textPage') return;
+  if (!leaveTexts()) {
+    e.target.value = textPage;
+    return;
+  }
+  textPage = e.target.value;
+  textQuery = '';
+  renderTexts();
+});
+
+$('#groups').addEventListener('click', (e) => {
+  const save = e.target.closest('[data-text-save]');
+  const reset = e.target.closest('[data-text-reset]');
+  if (save) saveText(save.closest('.text-row'), false);
+  else if (reset && confirm('Bu yazı koddaki asıl haline dönsün mü?')) saveText(reset.closest('.text-row'), true);
+});
+
+window.addEventListener('beforeunload', (e) => {
+  if (textRows().some(isDirty)) e.preventDefault();
 });
 
 /* ---------- Başlangıç ---------- */
